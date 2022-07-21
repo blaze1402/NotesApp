@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>To Do App</title>
+  <title>Notes App</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
 </head>
@@ -12,7 +12,7 @@
 <body class="bg-primary text-bg-dark">
   <nav class="navbar navbar-expand navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{{url_for('index_page')}}">To Do App</a>
+      <a class="navbar-brand" href="{{url_for('index_page')}}">Notes App</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -52,47 +52,49 @@
   </nav>
   <div class="container bg-info bg-opacity-50 rounded p-3">
     <div class="container bg-dark rounded p-3">
-      <h2>Add a To Do</h2>
+      <h2>Add a Note</h2>
       <hr style="width:70%;">
-      <form>
+      <form action="/" method="POST">
         <div class="mb-3">
-          <input type="text" style="width: 25%;" class="form-control" id="title" placeholder="Enter your title" aria-describedby="emailHelp">
+          <input type="text" maxlength="200" style="width: 25%;" class="form-control" name="title"
+            placeholder="Enter your title" aria-describedby="emailHelp" required="True">
         </div>
         <div class="mb-3">
-          <input type="text" style="width: 75%; min-height: 20%;" class="form-control" id="desc"  placeholder="Enter your description">
+          <textarea style="width: 75%;" rows="3" class="form-control" name="desc"
+            placeholder="Enter your description  (1500 characters)" maxlength="1500" required="True"></textarea>
         </div>
         <button type="submit" class="btn btn-success">Submit</button>
       </form>
     </div>
     <div class="container bg-dark rounded mt-3 p-3">
-      <h2>Your saved To Do(s)</h2>
+      <h2>Your saved Note(s)</h2>
+      {% if allNotes|length==0 %}
+      <div class="alert alert-danger" role="alert">No notes found, Add your first note now!</div>
+      {% else %}
       <table class="table text-bg-dark">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">S No.</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Time</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
+          {% for note in allNotes %}
           <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ note.title }}</td>
+            <td>{{ note.desc }}</td>
+            <td>{{ note.time }}</td>
+            <td>
+              <a href="/update/{{note.sno}}" type="button" class="btn btn-success btn-sm mt-1 ms-1">Update</a>
+              <a href="/delete/{{note.sno}}" type="button" class="btn btn-danger btn-sm mt-1 ms-1">Delete</a>
+            </td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          {% endfor %}
+          {% endif %}
         </tbody>
       </table>
     </div>
