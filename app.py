@@ -11,7 +11,7 @@ class Note(db.Model):
     sno=db.Column(db.Integer, primary_key=True)
     title=db.Column(db.String(200), nullable=False)
     desc=db.Column(db.String(1500), nullable=False)
-    time=db.Column(db.DateTime,default=datetime.now())
+    time=db.Column(db.String, nullable=False)
 
     def __repr__(self) -> str:
         return f"{self.Sno} - {self.title}"
@@ -21,16 +21,29 @@ def index_page():
     if request.method=='POST':
         title=request.form['title']
         desc=request.form['desc']
-        note=Note(title=title, desc=desc)
+        time=datetime.now().strftime('%H:%M %d/%m/%Y')
+        note=Note(title=title, desc=desc, time=time)
         db.session.add(note)
         db.session.commit()
         
     allNotes=Note.query.all()
     return render_template("index.html", allNotes=allNotes)
 
-@app.route('/update/<int:sno>')
-def update():
-    pass
+@app.route('/edit/<int:sno>', methods=['GET', 'POST'])
+def edit(sno):
+    if request.method=='POST':
+        title=request.form['title']
+        desc=request.form['desc']
+        note=Note.query.filter_by(sno=sno).first()
+        note.title=title
+        note.desc=desc
+        note.time=datetime.now().strftime('%H:%M %d/%m/%Y')
+        db.session.add(note)
+        db.session.commit()
+        return redirect(url_for('index_page'))
+
+    note=Note.query.filter_by(sno=sno).first()
+    return render_template("edit.html", note=note)
 
 @app.route('/delete/<int:sno>')
 def delete(sno):
