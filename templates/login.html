@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+    Login
+{% endblock title %}
+{% block body %}
+    <div class="container-fluid bg-info bg-opacity-50 rounded p-3 text-center">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+        <form method="POST" class="form-login mx-5">
+            <input type="email" name="email" >
+        </form>
+    </div>
+{% endblock body %}
