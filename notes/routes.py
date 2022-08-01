@@ -1,8 +1,9 @@
+from flask_login import login_user
 from flask import redirect, render_template, request, url_for
 from datetime import datetime
 from notes.forms import LoginForm, RegisterForm
 from notes import app, db
-from notes.models import Note
+from notes.models import Note, User
 
 # homepage of the website
 @app.route("/", methods=["GET", "POST"])
@@ -27,8 +28,12 @@ def index_page():
 def register_page():
     form = RegisterForm()
     if form.validate_on_submit:
-        form.username
-
+        create_user=User(username=form.username.data,
+                         email=form.email.data,
+                         password_hash=form.password.data)
+        db.session.add(create_user)
+        db.session.commit()
+        # login_user(create_user)
     return render_template("register.html", form=form)
 
 
