@@ -1,4 +1,4 @@
-from notes import db, login_manager
+from notes import db, login_manager, bcrypt
 from flask_login import UserMixin
 
 @login_manager.user_loader
@@ -14,6 +14,21 @@ class User(db.Model, UserMixin):
 
     def __repr__(self) -> str:
         return f"{self.username}"
+    
+    #this @property decorator is used to get or set the password attribute by making it easily accessible
+    @property
+    def password(self):
+        return self.password
+
+    #here @password.setter is used by @property decorator to easily set the password attribute
+    @password.setter
+    def password(self, plain_text_password):
+        self.password_hash=bcrypt.generate_password_hash(plain_text_password).decode('utf-8')
+    
+    #this is used to check the attempted password typed during login attempt
+    def check_password_correction(self, attempted_password):
+        return bcrypt.check_password_hash(self.password_hash, attempted_password)
+
 
 
 class Note(db.Model):

@@ -34,7 +34,7 @@ def register_page():
     if form.validate_on_submit():
         create_user=User(username=form.username.data,
                          email=form.email.data,
-                         password_hash=form.password.data)
+                         password=form.password.data)
         db.session.add(create_user)
         db.session.commit()
         login_user(create_user)
@@ -54,8 +54,7 @@ def login_page():
     form = LoginForm()
     if form.validate_on_submit():
         attempted_user=User.query.filter_by(username=form.username.data).first()
-        attempted_password=User.query.filter_by(password_hash=form.password.data).first()
-        if attempted_user and attempted_password:
+        if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
             login_user(attempted_user)
             flash(f'You have been successfully logged in as {attempted_user.username}!', category='success')
             return redirect(url_for('index_page'))
@@ -68,7 +67,7 @@ def login_page():
 def logout_page():
     logout_user()
     flash(f'You have been logged out!', category='info')
-    return redirect(url_for('index_page'))
+    return redirect(url_for('login_page'))
 
 
 @app.route("/edit/<int:sno>", methods=["GET", "POST"])
