@@ -27,7 +27,6 @@ Home
     <table class="table text-bg-dark">
       <thead>
         <tr>
-          <th scope="col">S No.</th>
           <th scope="col">Title</th>
           <th scope="col">Description</th>
           <th scope="col">Last Modified Time</th>
@@ -36,16 +35,17 @@ Home
       </thead>
       <tbody>
         {% for note in allNotes %}
-        <tr>
-          <th scope="row">{{ loop.index }}</th>
-          <td>{{ note.title }}</td>
-          <td>{{ note.desc }}</td>
-          <td>{{ note.time[:5] }}<br>{{ note.time[6:] }}</td>
-          <td>
-            <a href="/edit/{{note.sno}}" type="button" class="btn btn-success btn-sm mt-1 ms-1 px-3">Edit</a>
-            <a href="/delete/{{note.sno}}" type="button" class="btn btn-danger btn-sm mt-1 ms-1">Delete</a>
-          </td>
-        </tr>
+          {% if note.saved==user %}
+          <tr>
+            <td>{{ note.title }}</td>
+            <td>{{ note.desc }}</td>
+            <td>{{ note.time[:5] }}<br>{{ note.time[6:] }}</td>
+            <td>
+              <a href="/edit/{{note.sno}}" type="button" class="btn btn-success btn-sm mt-1 ms-1 px-3">Edit</a>
+              <a href="/delete/{{note.sno}}" type="button" class="btn btn-danger btn-sm mt-1 ms-1">Delete</a>
+            </td>
+          </tr>
+          {% endif %}
         {% endfor %}
         {% endif %}
       </tbody>

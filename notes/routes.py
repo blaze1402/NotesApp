@@ -1,4 +1,4 @@
-from flask_login import login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from flask import flash, redirect, render_template, request, url_for
 from datetime import datetime
 from notes.forms import LoginForm, RegisterForm
@@ -8,19 +8,29 @@ from notes.models import Note, User
 # homepage of the website
 @app.route("/", methods=["GET", "POST"])
 def index_page():
+    global user
 
     # Whenever a post request is received then this if block will execute and save a note to the database
-    if request.method == "POST":
-        title = request.form["title"]
-        desc = request.form["desc"]
-        time = datetime.now().strftime("%H:%M %d/%m/%Y")
-        note = Note(title=title, desc=desc, time=time)
-        db.session.add(note)
-        db.session.commit()
+    def addNote():
+        if request.method == "POST":
+            title = request.form["title"]
+            desc = request.form["desc"]
+            time = datetime.now().strftime("%H:%M %d/%m/%Y")
+            note = Note(title=title, desc=desc, time=time, saved=user)
+            db.session.add(note)
+            db.session.commit()
 
-    # otherwise the saved notes will be shown to the users
+    # for authenticating the user and getting their user ID
+    if current_user.is_authenticated:
+         user = current_user.get_id() # return username in get_id()
+         addNote()
+    else:
+        user = 999999999 # for anonymous user
+        addNote()
+    
+    # the saved notes will be shown to the users
     allNotes = Note.query.all()
-    return render_template("index.html", allNotes=allNotes)
+    return render_template("index.html", allNotes=allNotes, user=int(user))
 
 
 # registration page of the website
