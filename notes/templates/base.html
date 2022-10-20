@@ -28,10 +28,10 @@
                             href="{{url_for('index_page')}}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bolder" href="#">Notes</a>
+                        <a class="nav-link fw-bolder" href="{{url_for('notes_page')}}">Notes</a>
                     </li>
                     <li class="nav-item fw-bolder">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="{{url_for('about_page')}}">About</a>
                     </li>
                 </ul>
                 {% if current_user.is_authenticated %}

@@ -5,9 +5,18 @@ from notes.forms import LoginForm, RegisterForm
 from notes import app, db
 from notes.models import Note, User
 
-# homepage of the website
-@app.route("/", methods=["GET", "POST"])
+
+@app.route('/index')
 def index_page():
+    return render_template("index.html")
+
+@app.route('/about')
+def about_page():
+    return render_template("about.html")
+
+# notes page 
+@app.route("/notes", methods=["GET", "POST"])
+def notes_page():
     global user
 
     # Whenever a post request is received then this if block will execute and save a note to the database
@@ -30,8 +39,7 @@ def index_page():
     
     # the saved notes will be shown to the users
     allNotes = Note.query.all()
-    return render_template("index.html", allNotes=allNotes, user=int(user))
-
+    return render_template("notes.html", allNotes=allNotes, user=int(user))
 
 # registration page of the website
 @app.route("/register", methods=["GET", "POST"])
@@ -49,7 +57,7 @@ def register_page():
         db.session.commit()
         login_user(create_user)
         flash(f'Account created successfully! You are now logged in as {create_user.username}!', category='success')
-        return redirect(url_for('index_page'))
+        return redirect(url_for('notes_page'))
 
     #this condition displays the errors done while submitting the form
     if form.errors!={}:
@@ -67,7 +75,7 @@ def login_page():
         if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
             login_user(attempted_user)
             flash(f'You have been successfully logged in as {attempted_user.username}!', category='success')
-            return redirect(url_for('index_page'))
+            return redirect(url_for('notes_page'))
         else:
             flash('Username and password do not match! Please try again.', category='danger')
 
@@ -91,7 +99,7 @@ def edit(sno):
         note.time = datetime.now().strftime("%H:%M %d/%m/%Y")
         db.session.add(note)
         db.session.commit()
-        return redirect(url_for("index_page"))
+        return redirect(url_for("notes_page"))
 
     note = Note.query.filter_by(sno=sno).first()
     return render_template("edit.html", note=note)
@@ -102,4 +110,4 @@ def delete(sno):
     note = Note.query.filter_by(sno=sno).first()
     db.session.delete(note)
     db.session.commit()
-    return redirect(url_for("index_page"))
+    return redirect(url_for("notes_page"))

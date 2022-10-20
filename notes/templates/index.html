@@ -1,55 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}
-Home
+    Login
 {% endblock title %}
 {% block body %}
-<div class="container bg-light bg-opacity-25 rounded p-3">
-  <div class="container bg-dark rounded p-3">
-    <h2>Add a Note</h2>
-    <hr style="width:70%;">
-    <form action="/" method="POST">
-      <div class="mb-3">
-        <input type="text" style="width: 25%;" class="form-control" name="title"
-          placeholder="Enter your title" maxlength="200" required="True">
-      </div>
-      <div class="mb-3">
-        <textarea rows="3" style="width: 75%;" class="form-control" name="desc"
-          placeholder="Enter your description  (1500 characters)" maxlength="1500" required="True"></textarea>
-      </div>
-      <button type="submit" class="btn btn-success">Submit</button>
-    </form>
-  </div>
-  <div class="container bg-dark rounded mt-3 p-3">
-    <h2>Your saved Note(s)</h2>
-    {% if allNotes|length==0 %}
-    <div class="alert alert-danger" role="alert">No notes found, add your first note now!</div>
-    {% else %}
-    <table class="table text-bg-dark">
-      <thead>
-        <tr>
-          <th scope="col">Title</th>
-          <th scope="col">Description</th>
-          <th scope="col">Last Modified Time</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for note in allNotes %}
-          {% if note.saved==user %}
-          <tr>
-            <td>{{ note.title }}</td>
-            <td>{{ note.desc }}</td>
-            <td>{{ note.time[:5] }}<br>{{ note.time[6:] }}</td>
-            <td>
-              <a href="/edit/{{note.sno}}" type="button" class="btn btn-success btn-sm mt-1 ms-1 px-3">Edit</a>
-              <a href="/delete/{{note.sno}}" type="button" class="btn btn-danger btn-sm mt-1 ms-1">Delete</a>
-            </td>
-          </tr>
-          {% endif %}
-        {% endfor %}
-        {% endif %}
-      </tbody>
-    </table>
-  </div>
-</div>
+    <div class="container bg-light bg-opacity-25 mt-3 text-dark rounded p-3 text-center">
+            <img class="mt-3 mb-4" src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+            <hr style="color: black;">
+            <div class="row">
+                <div class="col">
+                    <img class="col-7 mt-3 mb-4" src="{{ url_for('static', filename='notes.webp') }}" alt="notebook with coffee">
+                </div>
+                <div class="col">
+                    <h2 class="ps-0">Notes is the best place to jot down quick thoughts or to save longer notes filled with checklists, images, web links, scanned documents, handwritten notes, or sketches. And it's easy to keep all your devices in sync, so you’ll always have your notes with you.</h2>
+                </div>
+              </div>
+    </div>
 {% endblock body %}
