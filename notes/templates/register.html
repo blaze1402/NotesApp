@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}
+    Register
+{% endblock title %}
+{% block body %}
+<div class="container bg-light bg-opacity-25 mt-3 text-dark rounded p-3 text-center">
+    <div class="row">
+        <div class="col">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo"  style="position: relative; margin: 25%;">
+        </div>
+        <div class="col">
+            <form method="POST" class="form-register mx-5">
+                {{ form.hidden_tag() }}
+                <h1 class="h3 mt-4 mb-0 font-weight-normal">
+                    Sign Up
+                </h1>
+                <p class="mb-2">It's quick and easy</p><br>
+                {{ form.username(class="form-control", placeholder="Username")}}
+                <br>
+                {{ form.email(class="form-control", placeholder="Email address")}}
+                <br>
+                {{ form.password(class="form-control", placeholder="Password")}}
+                <br>
+                {{ form.confirmPassword(class=" form-control", placeholder="Confirm Password")}}
+    
+                <br>
+                <div class="checkbox mb-3">
+                    <h6>
+                        Already have an account? <a href="{{ url_for('login_page') }}" class="text-success fw-bold">Login here</a>
+                    </h6>
+                </div>
+                {{ form.submit(class="btn btn-lg btn-block btn-success mb-3")}}
+            </form>
+        </div>
+      </div>
+</div>
+{% endblock body %}
