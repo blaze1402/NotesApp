@@ -8,9 +8,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///notes.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "135d77340c66b6df976c29df"
 db = SQLAlchemy(app)
-bcrypt=Bcrypt(app)
-login_manager=LoginManager(app)
-login_manager.login_view='login_page'
-login_manager.login_message_category='info'
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = "login_page"
+login_manager.login_message_category = "info"
 
 from notes import routes
