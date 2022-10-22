@@ -6,7 +6,7 @@ from notes import app, db
 from notes.models import Note, User
 
 
-@app.route('/index')
+@app.route('/')
 def index_page():
     return render_template("index.html")
 
